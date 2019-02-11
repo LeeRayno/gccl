@@ -1,0 +1,28 @@
+{
+  "name": "gccl",
+  "version": "1.0.1",
+  "description": "commitizen & commitlint & lint-staged",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "node ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeeRayno/gccl.git"
+  },
+  "keywords": [
+    "commitizen",
+    "commitlint",
+    "lint-staged"
+  ],
+  "author": "LeeRay",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeeRayno/gccl/issues"
+  },
+  "homepage": "https://github.com/LeeRayno/gccl#readme",
+  "devDependencies": {
+    "chalk": "^2.4.2",
+    "execa": "^1.0.0"
+  }
+}
