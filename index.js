@@ -2,19 +2,19 @@ const execa = require('execa')
 const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
-const pkgpath = path.resolve(process.cwd(), '../../', './package.json')
+const rootpath = path.resolve(process.cwd(), '../../')
 
 async function install() {
   // commitizen
-  await execa.shell('npm install -g commitizen', {cwd: pkgpath})
-  await execa.shell('commitizen init cz-conventional-changelog -D --save-exact', {cwd: pkgpath})
+  await execa.shell('npm install -g commitizen', {cwd: rootpath})
+  await execa.shell('commitizen init cz-conventional-changelog -D --save-exact', {cwd: rootpath})
 
   // commitlint
-  await execa.shell('npm install --save-dev @commitlint/config-conventional @commitlint/cli', {cwd: pkgpath})
-  execa.shellSync('echo module.exports = {extends: [\'@commitlint/config-conventional\']} > commitlint.config.js', {cwd: pkgpath})
+  await execa.shell('npm install --save-dev @commitlint/config-conventional @commitlint/cli', {cwd: rootpath})
+  execa.shellSync('echo module.exports = {extends: [\'@commitlint/config-conventional\']} > commitlint.config.js', {cwd: rootpath})
 
   // lint-staged
-  await execa.shell('npm install husky lint-staged -D')
+  await execa.shell('npm install husky lint-staged -D', {cwd: rootpath})
 
   console.log(`${chalk.bgMagenta.white.bold('devDependencies has installed')}`)
 
@@ -22,6 +22,7 @@ async function install() {
 }
 
 function writeFile() {
+  const pkgpath = path.resolve(rootpath, './package.json')
   fs.readFile(pkgpath, 'utf8', (err, data) => {
     if (err) {
       console.log(err)
