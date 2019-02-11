@@ -4,17 +4,21 @@ const path = require('path')
 const chalk = require('chalk')
 const rootpath = path.resolve(process.cwd(), '../../')
 
+function shell(sh) {
+  execa.shell(sh, {cwd: rootpath})
+}
+
 async function install() {
   // commitizen
-  await execa.shell('npm install -g commitizen', {cwd: rootpath})
-  await execa.shell('commitizen init cz-conventional-changelog -D --save-exact', {cwd: rootpath})
+  await shell('npm install -g commitizen')
+  await shell('commitizen init cz-conventional-changelog -D --save-exact')
 
   // commitlint
-  await execa.shell('npm install --save-dev @commitlint/config-conventional @commitlint/cli', {cwd: rootpath})
-  execa.shellSync('echo module.exports = {extends: [\'@commitlint/config-conventional\']} > commitlint.config.js', {cwd: rootpath})
+  await shell('npm install --save-dev @commitlint/config-conventional @commitlint/cli')
+  await shell('echo module.exports = {extends: [\'@commitlint/config-conventional\']} > commitlint.config.js')
 
   // lint-staged
-  await execa.shell('npm install husky lint-staged -D', {cwd: rootpath})
+  await shell('npm install husky lint-staged -D')
 
   console.log(`${chalk.bgMagenta.white.bold('devDependencies has installed')}`)
 
@@ -30,9 +34,13 @@ function writeFile() {
     }
 
     const pkg = JSON.parse(data)
-
-    pkg.husky.hooks['pre-commit'] = 'lint-staged'
-    pkg.husky.hooks['commit-msg'] = 'commitlint -E HUSKY_GIT_PARAMS'
+    pkg.husky = pkg.husky || {}
+    Object.assign(pkg.husky, {
+      'hooks': {
+        'pre-commit': 'lint-staged',
+        'commit-msg': 'commitlint -E HUSKY_GIT_PARAMS'
+      }
+    })
 
     pkg['lint-staged'] = {'*.{js,vue}': ['eslint --fix', 'git add']}
 
@@ -43,7 +51,7 @@ function writeFile() {
         console.error(err)
       }
       console.log('')
-      console.log(`${chalk.green('package.json war rewrited')}`)
+      console.log(`${chalk.green('package.json was rewrited')}`)
     })
   })
 }
