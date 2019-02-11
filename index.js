@@ -4,14 +4,14 @@ const path = require('path')
 const chalk = require('chalk')
 const rootpath = path.resolve(process.cwd(), '../../')
 
-function shell(sh) {
-  execa.shell(sh, {cwd: rootpath})
+async function shell(sh) {
+  return execa.shell(sh, {cwd: rootpath})
 }
 
 async function install() {
   // commitizen
   await shell('npm install -g commitizen')
-  await shell('commitizen init cz-conventional-changelog -D --save-exact')
+  await shell('commitizen init cz-conventional-changelog --save-dev --save-exact')
 
   // commitlint
   await shell('npm install --save-dev @commitlint/config-conventional @commitlint/cli')
