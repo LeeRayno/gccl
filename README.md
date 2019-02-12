@@ -1,4 +1,4 @@
-# gccl
+# gccl [![Build status](https://travis-ci.com/LeeRayno/gccl.svg?branch=master)](https://travis-ci.com/LeeRayno/gccl)
 
 git commitizen &amp; commitlint &amp; lint-staged
 
