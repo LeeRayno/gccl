@@ -1,35 +1,47 @@
-const execa = require('execa')
 const fs = require('fs')
+const os = require('os')
+const ora = require('ora')
 const path = require('path')
 const chalk = require('chalk')
+const execa = require('execa')
+
 const rootpath = path.resolve(process.cwd(), '../../')
+
+const spinner = ora('Loading devDependencies...')
 
 async function shell(sh) {
   return execa.shell(sh, {cwd: rootpath})
 }
 
 async function install() {
+  spinner.start()
   // commitizen
   await shell('npm install -g commitizen')
   await shell('commitizen init cz-conventional-changelog --save-dev --save-exact')
+  spinner.text = 'commitizen installed'
 
   // commitlint
-  await shell('npm install --save-dev @commitlint/config-conventional @commitlint/cli')
+  if (os.type() === 'Windows_NT') {
+    await shell('npm install --save-dev @commitlint/config-conventional @commitlint/cli')
+  } else {
+    await shell('npm install --save-dev @commitlint/{config-conventional,cli}')
+  }
+  spinner.text = 'commitlint installed'
+
   await shell('echo module.exports = {extends: [\'@commitlint/config-conventional\']} > commitlint.config.js')
 
   // lint-staged
   await shell('npm install husky lint-staged -D')
-
-  console.log(`${chalk.bgMagenta.white.bold('devDependencies has installed')}`)
-
-  writeFile()
+  spinner.succeed(chalk.green('devDependencies installed'))
 }
 
-function writeFile() {
+async function writeFile() {
+  spinner.text = 'write file...'
   const pkgpath = path.resolve(rootpath, './package.json')
   fs.readFile(pkgpath, 'utf8', (err, data) => {
     if (err) {
       console.log(err)
+      spinner.fail('failed there has no package.json you should run npm init on the command')
       return
     }
 
@@ -42,7 +54,8 @@ function writeFile() {
       }
     })
 
-    pkg['lint-staged'] = {'*.{js,vue}': ['eslint --fix', 'git add']}
+    pkg['lint-staged'] = pkg['lint-staged'] || {}
+    pkg['lint-staged']['*.{js,vue}'] = ['eslint --fix', 'git add']
 
     const newPkg = JSON.stringify(pkg, null, 2)
 
@@ -50,10 +63,14 @@ function writeFile() {
       if (err) {
         console.error(err)
       }
-      console.log('')
-      console.log(`${chalk.green('package.json was rewrited')}`)
+      spinner.succeed(chalk.green('wrote to package.json'))
     })
   })
 }
 
-install()
+async function init() {
+  await install()
+  await writeFile()
+}
+
+init()
