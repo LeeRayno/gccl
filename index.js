@@ -47,9 +47,17 @@ async function install() {
   
     // commitlint
     if (process.platform === 'win32') {
-      await shell('@commitlint/config-conventional @commitlint/cli -D')
+      if (isYarn) {
+        await shell('@commitlint/config-conventional @commitlint/cli --dev')
+      } else {
+        await shell('@commitlint/config-conventional @commitlint/cli -D')
+      }
     } else {
-      await shell('@commitlint/{config-conventional,cli} -D')
+      if (isYarn) {
+        await shell('@commitlint/{config-conventional,cli} --dev')
+      } else {
+        await shell('@commitlint/{config-conventional,cli} -D')
+      }
     }
     spinner.text = 'commitlint installed'
   
