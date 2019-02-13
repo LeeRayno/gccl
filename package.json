@@ -3,7 +3,7 @@
   "version": "1.0.7",
   "description": "commitizen & commitlint & lint-staged",
   "scripts": {
-    "preinstall": "node index.js",
+    "postinstall": "node index.js",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
   },
   "repository": {
