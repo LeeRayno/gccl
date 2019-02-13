@@ -1,6 +1,6 @@
 {
   "name": "gccl",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "commitizen & commitlint & lint-staged",
   "scripts": {
     "postinstall": "node index.js",
