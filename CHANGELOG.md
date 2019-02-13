@@ -1,3 +1,12 @@
+## [1.0.9](https://github.com/LeeRayno/gccl/compare/v1.0.8...v1.0.9) (2019-02-13)
+
+
+### Bug Fixes
+
+* **script:** preinstall ([edd7274](https://github.com/LeeRayno/gccl/commit/edd7274))
+
+
+
 ## [1.0.8](https://github.com/LeeRayno/gccl/compare/v1.0.7...v1.0.8) (2019-02-13)
 
 
