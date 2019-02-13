@@ -6,7 +6,6 @@ const execa = require('execa')
 
 const rootpath = path.resolve(process.cwd(), '../../')
 const pkgpath = path.resolve(rootpath, './package.json')
-
 const spinner = ora('Loading devDependencies...')
 
 async function shell(sh) {
