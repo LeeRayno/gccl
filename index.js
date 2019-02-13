@@ -1,6 +1,6 @@
 const fs = require('fs')
-const ora = require('ora')
 const path = require('path')
+const ora = require('ora')
 const chalk = require('chalk')
 const execa = require('execa')
 const { execSync } = require('child_process')
@@ -15,10 +15,12 @@ const spinner = ora('Loading devDependencies...')
 async function shell(sh, global = false) {
   let she
   if (isYarn) {
-    she = `yarn ${global ? 'global' : ''} add ${sh}`
+    she = `yarn ${global ? 'global ' : ''}add ${sh}`
   } else {
     she = `npm install ${sh} ${global ? '-g' : ''}`
   }
+  console.log('')
+  console.log(chalk.red(she))
   return execa.shell(she, { cwd })
 }
 
@@ -58,6 +60,7 @@ async function install() {
 
     spinner.succeed(chalk.green('devDependencies installed'))
   } catch (err) {
+    console.log(err)
     process.exit(1)
   }
 }
